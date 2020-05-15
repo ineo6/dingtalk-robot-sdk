@@ -20,7 +20,7 @@ class Robot {
     }
   }
 
-  request(body) {
+  getWebHook() {
     let signStr = "";
 
     if (this.secret && this.isSession === false) {
@@ -35,9 +35,13 @@ class Robot {
       debug("Sign string is %s, result is %s", timeStamp + '\n' + this.secret, hash)
     }
 
+    return this.webhook + signStr;
+  }
+
+  request(body) {
     debug("Send message: %O ", body);
 
-    axios.post(this.webhook + signStr, JSON.stringify(body), {
+    axios.post(this.getWebHook(), JSON.stringify(body), {
       headers: {
         'Content-Type': 'application/json'
       },
